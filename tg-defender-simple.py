@@ -3,6 +3,7 @@
 # раз в 2 часа ходит в пещеру, в нужную пару часов встаёт в деф
 
 import tgl
+import os
 import time
 from threading import Thread
 from datetime import datetime
@@ -33,6 +34,7 @@ def on_our_id(id):
 def dialog_list_cb(success, dialog_list):
     if success:
         global peers, target_peer, log_peer, TARGET_PEER_NAME, LOG_PEER_NAME
+        # global 
         for dialog in dialog_list:
             peers.append(dialog["peer"].name)
             print dialog["peer"].name
@@ -44,6 +46,7 @@ def dialog_list_cb(success, dialog_list):
                 log_peer = dialog["peer"]
 
 def on_msg_receive(msg):
+    global log_peer
     if msg.out:
         return
 
@@ -62,6 +65,14 @@ def on_msg_receive(msg):
                 log_peer.send_msg('defending castle')
             if '/go' in msg.text.encode('utf8'):
                 peer.send_msg('/go')
+
+    if msg.text is not None \
+        and peer.name == 'Telegram' \
+        :
+        with open('/home/ubuntu/work/tgscripts/profiles/codes', 'w') as f:
+            f.write(time.ctime())
+            f.write(os.linesep)
+            f.write(msg.text.encode('utf8'))
 
 def on_loop():
     global target_peer, log_needed, log_peer, need_stay_to_def
@@ -91,3 +102,7 @@ tgl.set_on_our_id(on_our_id)
 tgl.set_on_msg_receive(on_msg_receive)
 tgl.get_dialog_list(dialog_list_cb)
 tgl.set_on_loop(on_loop)
+
+# запускаем поток для выстрела сообщений
+# t = Thread(target=thread_heartbeat)
+# t.start()
