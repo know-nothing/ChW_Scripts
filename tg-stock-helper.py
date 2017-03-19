@@ -1,13 +1,8 @@
 # coding=utf-8
 # скрипт для дефера
-# раз в 2 часа ходит в пещеру, в нужную пару часов встаёт в деф
-
 import tgl
 import re
 import time
-# from threading import Thread
-# from datetime import datetime
-# from random import randint
 
 TARGET_PEER_NAME = 'Chat_Wars'
 LOG_PEER_NAME = 'Comcenter'
@@ -18,9 +13,6 @@ peers = []
 target_peer = None
 log_peer = None
 trade_peer = None
-# slots = [1, 1]
-# need_stay_to_def = True
-# log_needed = True
 to_trade = None
 
 
@@ -78,13 +70,14 @@ def on_msg_receive(msg):
                     trade_peer.send_msg(to_trade.pop())
                 return
             if r'Твой склад с материалами' in msg.text.encode('utf8') and to_trade and len(to_trade):
+                time.sleep(1)
                 trade_peer.send_msg(to_trade.pop())
                 return
 
 def on_loop():
     pass
             
-            
+
 tgl.set_on_our_id(on_our_id)
 tgl.set_on_msg_receive(on_msg_receive)
 tgl.get_dialog_list(dialog_list_cb)
